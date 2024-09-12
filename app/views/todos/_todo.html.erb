@@ -2,7 +2,12 @@
   <%= turbo_frame_tag dom_id(todo) do %>
     <div class="flex justify-between items-center space-x-2">
       <%= link_to todo.name, todo.complete? ? 'javascript:void(0)' : edit_todo_path(todo), class: todo.complete? ? 'line-through cursor-default' : '' %>
-
+      <% if todo.due_date.present? %>
+      <p class="text-sm text-gray-500">Due: <%= todo.due_date.strftime("%B %d, %Y") %></p>
+    <% end %>
+    <% if todo.assigned_user.present? %>
+    <p class="text-sm text-gray-500">Assigned to: <%= todo.assigned_user.email %></p>
+  <% end %>
       <div class="flex justify-end space-x-3">
           <%= button_to change_status_todo_path(todo, todo: { status: todo.complete? ? 'incomplete' : 'complete' }), class: "border border-dashed #{todo.complete? ? 'border-green-700' : 'border-gray-400 hover:border-green-700'} px-2 py-2 rounded-full #{todo.complete? ? 'text-green-700' : 'text-gray-400 hover:text-green-700'}", method: :patch do %>
             <% if todo.complete? %>
