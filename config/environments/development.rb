@@ -62,6 +62,24 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'localhost',
+    user_name:            'romokuz0@gmail.com',
+    password:             'htjk sbzw itzu fnnf',
+    authentication:       'plain',
+    enable_starttls_auto: true
+  }
+
+  # Add this line to ensure emails are stored in memory
+  # config.action_mailer.delivery_job = ActiveJob::QueueAdapters::TestAdapter::TestJob
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
@@ -74,3 +92,5 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
 end
+
+

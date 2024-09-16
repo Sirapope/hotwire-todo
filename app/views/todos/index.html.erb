@@ -3,17 +3,24 @@
     Todos
   </h2>
   <%= turbo_frame_tag "todos-container", class: "block max-w-md w-full mx-auto bg-zinc-50 py-8 px-4 border border-gray-200 rounded-md shadow-sm" do %>
-    <div class="border-b border-zinc-100 w-full">
+  <%= form_tag todos_path, method: :get, class: "flex items-center justify-center" do %>
+  <%= select_tag :user_id, 
+                 options_for_select([["All Users", ""]] + User.all.map { |u| [u.email, u.id] }, params[:user_id]),
+                 class: "shadow rounded-md border border-gray-300 outline-none px-3 py-2 mr-2" %>
+  
+  <%= submit_tag "Filter", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+<% end %>  
+  <div class="border-b border-zinc-100 w-full">
       <ul class="flex space-x-2 justify-center">
         <li>
           <%= link_to "Incomplete",
-            todos_path(status: "incomplete"),
+            todos_path(status: "incomplete", user_id: params[:user_id]),
             class: "inline-block pb-2 px-4 text-sm font-medium text-center text-gray-500 border-b-2 hover:text-gray-600 border-b-2 #{ params[:status] != "complete" ? 'border-blue-600' : 'border-transparent hover:border-gray-300'}"
           %>
         </li>
         <li>
           <%= link_to "Complete",
-            todos_path(status: "complete"),
+            todos_path(status: "complete", user_id: params[:user_id]),
             class: "inline-block pb-2 px-4 text-sm font-medium text-center text-gray-500 border-b-2 hover:text-gray-600 border-b-2 #{ params[:status] == "complete" ? 'border-blue-600' : 'border-transparent hover:border-gray-300'}"
           %>
         </li>
@@ -22,7 +29,7 @@
 
     <% unless params[:status] == "complete" %>
       <div class="py-2 px-4">
-        <%= render "form", todo: Todo.new %>
+        <%= render "form", todo: Todo.new(assigned_user_id: params[:user_id]) %>
       </div>
     <% end %>
     <ul id="todos-list">
